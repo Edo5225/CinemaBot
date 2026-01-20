@@ -67,7 +67,7 @@ public class MessageHandler {
     private void sendStartMessage(long chatId) {
         SendMessage msg = SendMessage.builder()
                 .chatId(chatId)
-                .text("Добро пожаловать!")
+                .text("Добро пожаловать! \n Введите /search 'Наименование фильма/сериала' для поиска \n Например: /search Матрица")
                 .replyMarkup(mainKeyboardFactory.mainMenu())
                 .build();
         bot.executeSafe(msg);
@@ -83,7 +83,6 @@ public class MessageHandler {
 
     private void handleSearch(long chatId, String text) {
         String query = text.substring("/search".length()).trim();
-        sessionService.saveSession(chatId, query, null);
         MovieView movie = movieService.getMovieByIndex(query, 0);
         if (movie == null) {
             sendMessage(chatId, "Фильм не найден");

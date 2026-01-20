@@ -26,13 +26,15 @@ public class MovieApiService {
         var response = tmdbClient.searchMovies(apiKey, query, "ru-RU");
         if (response == null || response.getResults() == null || response.getResults().isEmpty())
             return null;
-        var movies = response.getResults();
+        List<MovieDTO> movies = response.getResults().stream()
+                .filter(dto -> !"person".equals(dto.getMediaType()))
+                .toList();
 //        var sortMovies = sortMovies(movies); TODO добавить метод с сортировкой
         if (index < 0 || index >= movies.size()) return null;
         var dto = movies.get(index);
         String title = dto.getTitle() != null ? dto.getTitle() : dto.getName();
         String date = dto.getReleaseDate() != null ? dto.getReleaseDate() : dto.getFirstAirDate();
-        String overview = dto.getOverview().isEmpty() ? "Описание отсутствует" : dto.getOverview();
+        String overview = (dto.getOverview().isBlank() || dto.getOverview() == null) ? "Описание отсутствует" : dto.getOverview();
         String rating = dto.getRating() != null ? dto.getRating().toString() : "нет рейтинга";
         return new MovieView(title, date, overview, Double.parseDouble(rating), index, movies.size(), dto.getId());
     }
@@ -48,9 +50,8 @@ public class MovieApiService {
         for (MovieDTO dto : movieDTO) {
             String name;
             String date;
-            String overview = dto.getOverview();
-            String rating = dto.getRating().toString();
-
+            String overview = dto.getOverview().isEmpty() ? "Описание отсутствует" : dto.getOverview();
+            String rating = dto.getRating() != null ? dto.getRating().toString() : "нет рейтинга";
             if (dto.getTitle() != null && dto.getReleaseDate() != null){
                 name = dto.getTitle();
                 date = dto.getReleaseDate();
