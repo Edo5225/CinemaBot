@@ -12,15 +12,17 @@ public class MovieDTO {
     @JsonProperty("id")
     private Long id;
     @JsonProperty("title")
-    String title;
+    private String title;
     @JsonProperty("name")
     String name;
     @JsonProperty("vote_average")
-    public Double rating;
+    private  Double rating;
     @JsonProperty("release_date")
-    public String releaseDate;
+    private String releaseDate;
     @JsonProperty("first_air_date")
-    public String firstAirDate;
+    private String firstAirDate;
     @JsonProperty("overview")
-    public String overview;
+    private String overview;
+    @JsonProperty("media_type")
+    private String mediaType;
 }
